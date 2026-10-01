@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Suggestion — Course Compass</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0A0D18;
+    --surface: #12162A;
+    --surface-raised: #171C34;
+    --border: #262C4A;
+    --border-hover: #3A4270;
+    --text: #EAEDF8;
+    --text-muted: #8890AE;
+    --gold: #DDA85F;
+    --gold-soft: rgba(221,168,95,0.14);
+    --teal: #4FD1C0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(221,168,95,0.08), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', Arial, sans-serif;
+    padding: 3rem 1.2rem 4rem;
+    min-height: 100vh;
+  }
+
+  a.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    margin-bottom: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 999px;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  }
+  a.back-home-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+    transform: translateX(-2px);
+  }
+  .back-home-wrap { max-width: 560px; margin: 0 auto; }
+
+  .container {
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Signature: compass rose */
+  .compass {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .compass svg { width: 100%; height: 100%; animation: sway 7s ease-in-out infinite; transform-origin: 50% 50%; }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-6deg); }
+    50% { transform: rotate(6deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .compass svg { animation: none; }
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', Arial, sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.35rem;
+  }
+
+  p.subtitle {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin-bottom: 1.6rem;
+    max-width: 42ch;
+  }
+
+  .count {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .count span { color: var(--gold); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  .skill-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.7rem;
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    position: relative;
+  }
+
+  .skill-item:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
+
+  .skill-item input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .badge {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .skill-item:has(input:checked) {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+  }
+  .skill-item:has(input:checked) .badge {
+    background: var(--gold);
+    color: #241705;
+  }
+  .skill-item:has(input:checked)::after {
+    content: "✓";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  button {
+    width: 100%;
+    background: var(--gold);
+    color: #201304;
+    border: none;
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-size: 0.95rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 20px -8px rgba(221,168,95,0.5);
+  }
+
+  button:hover {
+    background: #ecc07f;
+    transform: translateY(-1px);
+  }
+  button:active { transform: translateY(0); }
+  button:focus-visible, a.back-home-btn:focus-visible, .skill-item:focus-within {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Results section ---------- */
+  .results {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+   .custom-alert { position: fixed; top: 25px; right: 600px; min-width: 300px; max-width: 450px; padding: 15px 18px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 15px; font-family: Arial, sans-serif; font-size: 15px; font-weight: 500; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); z-index: 9999; animation: slideIn 0.4s ease; } .custom-alert button { border: none; background: transparent; font-size: 24px; cursor: pointer; line-height: 1; } .alert-success { background: #d1fae5; color: #065f46; border-left: 5px solid #10b981; } .alert-error { background: #fee2e2; color: #991b1b; border-left: 5px solid #ef4444; } .alert-warning { background: #fef3c7; color: #92400e; border-left: 5px solid #f59e0b; } .alert-info { background: #dbeafe; color: #1e40af; border-left: 5px solid #3b82f6; } @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+  .results h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .results h2::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 10px var(--teal);
+  }
+
+  .course-card {
+    background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: 10px;
+    padding: 1.2rem 1.3rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .course-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .course-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 1.8rem 1.2rem;
+  }
+</style>
+</head>
+<body>
+{% if messages %} {% for i in messages %} <div class="custom-alert {% if 'success' in i.tags %}alert-success {% elif 'error' in i.tags %}alert-error {% elif 'warning' in i.tags %}alert-warning {% else %}alert-info{% endif %}"> <span>{{ i }}</span> <button type="button" onclick="this.parentElement.remove()"> &times; </button> </div> {% endfor %} {% endif %}
+  <div class="back-home-wrap">
+    <a href="/myapp/home/" class="back-home-btn">← Back to Home</a>
+  </div>
+
+
+  <div class="container">
+    <div class="compass" aria-hidden="true">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#3A4270" stroke-width="2"/>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#DDA85F" stroke-width="1.5" stroke-dasharray="2 6"/>
+        <polygon points="50,12 57,50 50,88 43,50" fill="#DDA85F"/>
+        <polygon points="50,12 57,50 50,50" fill="#4FD1C0"/>
+        <circle cx="50" cy="50" r="4.5" fill="#EAEDF8"/>
+      </svg>
+    </div>
+
+    <h1>Course Suggestion</h1>
+
+    <p class="subtitle">Select the skills you're interested in and submit to get course suggestions charted for you.</p>
+
+    <div class="count"><span id="selCount">0</span>&nbsp;of&nbsp;9 skills selected</div>
+
+    <form method="post" action="/myapp/course_prediction_post/">
+      {% csrf_token %}
+
+      <div class="skill-list">
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="HTML">
+          <span class="badge">&lt;/&gt;</span> HTML
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="CSS">
+          <span class="badge">#</span> CSS
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="JavaScript">
+          <span class="badge">JS</span> JavaScript
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="Java">
+          <span class="badge">JV</span> Java
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="PHP">
+          <span class="badge">PH</span> PHP
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="Python">
+          <span class="badge">PY</span> Python
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="SQL">
+          <span class="badge">DB</span> SQL
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="Cpp">
+          <span class="badge">C+</span> C++
+        </label>
+        <label class="skill-item">
+          <input type="checkbox" name="skills" value="React">
+          <span class="badge">R</span> React
+        </label>
+      </div>
+
+      <button type="submit">Chart my course</button>
+    </form>
+  </div>
+
+  <!-- Results section: filled in by Django after the form is submitted -->
+  <div class="results">
+    <h2>Recommended for you</h2>
+
+    {% if result %}
+     
+        <div class="course-card">
+          <h3>{{ result }}</h3>
+          <p>{{result2}}</p>
+        </div>
+     
+    {% else %}
+      <div class="empty">Select some skills above and submit to see suggestions here.</div>
+    {% endif %}
+  </div>
+
+<script>
+  // just a live counter for feedback — form still submits normally via POST
+  const checkboxes = document.querySelectorAll('input[name="skills"]');
+  const selCount = document.getElementById('selCount');
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      selCount.textContent = document.querySelectorAll('input[name="skills"]:checked').length;
+    });
+  });
+</script>
+<script> setTimeout(function () { document.querySelectorAll('.custom-alert').forEach(function (alert) { alert.style.opacity = '0'; alert.style.transform = 'translateX(100%)'; alert.style.transition = '0.5s'; setTimeout(function () { alert.remove(); }, 500); }); }, 4000); </script>
+</body>
+</html>

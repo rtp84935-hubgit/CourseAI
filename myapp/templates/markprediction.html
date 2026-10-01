@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Score Predictor</title>
+<style>
+  :root {
+    --ink: #E9EAF2;
+    --ink-soft: #9AA1BF;
+    --paper: #0D1017;
+    --sheet: #151926;
+    --paper-line: #262C40;
+    --brass: #E4B95C;
+    --red: #E27272;
+    --green: #6FCF97;
+    --mono: "Courier New", Courier, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    background-image:
+      radial-gradient(ellipse 800px 420px at 50% -8%, rgba(228,185,92,0.08), transparent 60%),
+      linear-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 2.2em;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ink);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 20px;
+  }
+
+  .sheet {
+    width: 100%;
+    max-width: 620px;
+    background: var(--sheet);
+    border: 1px solid var(--paper-line);
+    box-shadow: 0 1px 0 var(--paper-line), 0 20px 50px -24px rgba(0,0,0,0.6);
+    padding: 44px 48px 40px;
+    position: relative;
+    animation: rise 0.5s ease;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sheet { animation: none; }
+  }
+
+  .sheet::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--ink-soft), var(--brass) 50%, var(--ink-soft));
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 6px;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .subhead {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 34px;
+    font-style: italic;
+  }
+
+  .field {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    column-gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dotted var(--paper-line);
+    transition: border-color 0.2s ease;
+  }
+
+  .field:focus-within {
+    border-bottom-color: var(--brass);
+  }
+
+  .field label {
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .field .hint {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  .field input {
+    width: 110px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 17px;
+    color: var(--ink);
+    border: none;
+    border-bottom: 1.5px solid var(--ink-soft);
+    background: transparent;
+    padding: 4px 2px 6px;
+    outline: none;
+    transition: border-color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .field input::placeholder {
+    color: #565D7D;
+  }
+
+  .field input:focus {
+    border-bottom-color: var(--brass);
+    text-shadow: 0 0 12px rgba(228,185,92,0.35);
+  }
+
+  .back-home-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .back-home-btn:hover {
+    background-color: #43a047;
+    transform: translateY(-1px);
+  }
+
+  .back-home-btn:active {
+    transform: translateY(0);
+  }
+
+  .actions {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  button.predict {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--brass);
+    color: #201404;
+    border: none;
+    padding: 13px 26px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px -10px rgba(228,185,92,0.6);
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+
+  button.predict:hover {
+    background: #f0c977;
+    transform: translateY(-1px);
+  }
+  button.predict:active { transform: translateY(0); }
+
+  button.predict:focus-visible,
+  .field input:focus-visible,
+  .back-home-btn:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .result {
+    margin-top: 38px;
+    padding-top: 28px;
+    border-top: 2px solid var(--ink-soft);
+  }
+
+  .result-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+
+  .result-row {
+    display: flex;
+    align-items: baseline;
+    gap: 22px;
+  }
+
+  .score-stamp {
+    font-family: var(--mono);
+    font-size: 56px;
+    font-weight: bold;
+    line-height: 1;
+    border: 3px solid currentColor;
+    padding: 10px 18px;
+    transform: rotate(-2deg);
+    display: inline-block;
+    color: var(--green);
+    text-shadow: 0 0 18px rgba(111,207,151,0.35);
+  }
+
+  .score-meta {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 240px;
+  }
+
+  .score-meta strong { color: var(--ink); }
+
+  footer {
+    margin-top: 30px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 480px) {
+    .sheet { padding: 32px 24px 28px; }
+    h1 { font-size: 24px; }
+    .score-stamp { font-size: 42px; }
+    .result-row { flex-direction: column; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sheet">
+    <p class="eyebrow">Score Forecast Sheet</p>
+    <h1>Future Score Predictor</h1>
+    <p class="subhead">Enter the five figures below to estimate the next assessment score.</p>
+
+    <form action="/myapp/markpredictionpost/" method="post">
+        {% csrf_token %}
+      <div class="field">
+        <label for="study_hours">Study hours per day
+          <span class="hint">0–10</span>
+        </label>
+        <input type="number" id="study_hours" name="study_hours" step="0.1" min="0" max="10" placeholder="3.0">
+      </div>
+
+      <div class="field">
+        <label for="attendance">Attendance
+          <span class="hint">% present, 0–100</span>
+        </label>
+        <input type="number" id="attendance" name="attendance" step="0.1" min="0" max="100" placeholder="85">
+      </div>
+
+      <div class="field">
+        <label for="previous_score">Previous score
+          <span class="hint">last mark, 0–100</span>
+        </label>
+        <input type="number" id="previous_score" name="previous_score" step="0.1" min="0" max="100" placeholder="72">
+      </div>
+
+      <div class="field">
+        <label for="assignments">Assignments completed
+          <span class="hint">% turned in, 0–100</span>
+        </label>
+        <input type="number" id="assignments" step="0.1" name="assignments" min="0" max="100" placeholder="90">
+      </div>
+
+      <div class="field">
+        <label for="sleep_hours">Sleep hours per night
+          <span class="hint">0–12</span>
+        </label>
+        <input type="number" id="sleep_hours" name="sleep_hours" step="0.1" min="0" max="12" placeholder="7">
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="predict">Predict score</button>
+      </div>
+    </form>
+
+    <div class="result">
+      <p class="result-label">Predicted future score</p>
+      <div class="result-row">
+        <span class="score-stamp">{{grade}}</span>
+        {% if grade %}
+        <span class="score-meta" style="
+display: inline-flex;
+align-items: flex-start;
+gap: 8px;
+max-width: 100%;
+word-break: break-word;
+overflow-wrap: break-word;
+padding: 4px 8px;
+background-color: #f3f4f6;
+border-radius: 4px;
+font-size: 14px;
+color: #374151;
+line-height: 1.5;
+">
+{{result2}}
+</span>
+        {% else %}
+        <span class="score-meta">Result will appear here.</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <footer>MODEL — weighted linear estimate · not an official record</footer>
+    <a href="/myapp/home/" class="back-home-btn">
+  ← Back to Home
+</a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up // Course Advisor</title>
+<style>
+  :root{
+    --bg:#0f1720;
+    --panel:#141f2b;
+    --panel-2:#0c141c;
+    --line:#22323f;
+    --text:#dfe7ec;
+    --muted:#7f93a1;
+    --accent:#5ee6c4;
+    --accent-dim:#2f5f52;
+    --error:#e6685e;
+    --mono: "JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans: "IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .card{
+    width:100%;
+    max-width:460px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+  }
+
+  .titlebar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    background:var(--panel-2);
+    border-bottom:1px solid var(--line);
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--accent); box-shadow:0 0 8px var(--accent);}
+
+  .content{padding:28px 26px 26px;}
+
+  .content h1{
+    margin:0 0 4px;
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:-.01em;
+  }
+  .content p.sub{
+    margin:0 0 22px;
+    font-size:13px;
+    color:var(--muted);
+    font-family:var(--mono);
+  }
+
+  form{display:flex; flex-direction:column; gap:14px;}
+
+  .row-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field label{
+    font-size:12.5px;
+    color:var(--muted);
+    font-family:var(--mono);
+    letter-spacing:.02em;
+  }
+  .field input,
+  .field select{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:11px 12px;
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:14.5px;
+    outline:none;
+    transition:border-color .15s ease;
+    width:100%;
+  }
+  .field select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237f93a1'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:32px;
+  }
+  .field input::placeholder{color:#4d5e6a;}
+  .field input:focus, .field select:focus{border-color:var(--accent-dim);}
+  .field input.invalid, .field select.invalid{border-color:var(--error);}
+
+  .field .msg{
+    font-size:12px;
+    font-family:var(--mono);
+    min-height:14px;
+    color:var(--error);
+  }
+
+  .pw-wrap{position:relative;}
+  .pw-wrap input{padding-right:40px;}
+  .toggle-pw{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:var(--muted);
+    cursor:pointer;
+    font-family:var(--mono);
+    font-size:11px;
+    padding:2px 4px;
+  }
+  .toggle-pw:hover{color:var(--accent);}
+
+  .strength{
+    height:3px;
+    border-radius:2px;
+    background:var(--line);
+    overflow:hidden;
+    margin-top:2px;
+  }
+  .strength-fill{
+    height:100%;
+    width:0%;
+    background:var(--error);
+    transition:width .2s ease, background .2s ease;
+  }
+
+  button.submit{
+    margin-top:6px;
+    background:var(--accent);
+    color:#06110d;
+    border:none;
+    border-radius:7px;
+    padding:12px;
+    font-size:14.5px;
+    font-weight:600;
+    font-family:var(--sans);
+    cursor:pointer;
+    transition:background .15s ease, transform .12s ease;
+  }
+  button.submit:hover{background:#7cf0d4;}
+  button.submit:active{transform:scale(.98);}
+
+  .footer-link{
+    margin-top:18px;
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .footer-link a{color:var(--accent); text-decoration:none;}
+  .footer-link a:hover{text-decoration:underline;}
+
+  @media (max-width:420px){
+    .row-2{grid-template-columns:1fr;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    button.submit{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="titlebar">
+    <span class="dot"></span>
+    <span>advisor@courses ~ signup</span>
+  </div>
+
+  <div class="content">
+    <h1>Create your account</h1>
+    <p class="sub">Get personalized course recommendations.</p>
+
+    <!-- Point this form at your Django signup view, e.g. /myapp/signup/ -->
+    <form id="signup-form" action="/myapp/signup_post/" method="post" novalidate>
+      {% csrf_token %}
+      <!-- If rendering this inside a Django template, replace the line below with {% csrf_token %} -->
+      <!-- <input type="hidden" name="csrfmiddlewaretoken" value=""> -->
+
+      <div class="field">
+        <label for="full_name">Full name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="e.g. Rahul Menon" required minlength="2">
+        <div class="msg" id="full_name-msg"></div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <div class="msg" id="email-msg"></div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" placeholder="e.g. 21" min="10" max="100" required>
+          <div class="msg" id="age-msg"></div>
+        </div>
+
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender">
+            <option value="">Prefer not to say</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="place">Place / City</label>
+        <input type="text" id="place" name="place" placeholder="e.g. Kozhikode, Kerala" required minlength="2">
+        <div class="msg" id="place-msg"></div>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" name="phone" placeholder="e.g. 9876543210" pattern="[0-9]{10}" title="10-digit phone number">
+        <div class="msg" id="phone-msg"></div>
+      </div>
+
+     
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8">
+          <button type="button" class="toggle-pw" data-target="password">SHOW</button>
+        </div>
+        <div class="strength"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="msg" id="password-msg"></div>
+      </div>
+
+      <div class="field">
+        <label for="confirm-password">Confirm password</label>
+        <div class="pw-wrap">
+          <input type="password" id="confirm-password" name="confirm_password" placeholder="Re-enter password" required>
+          <button type="button" class="toggle-pw" data-target="confirm-password">SHOW</button>
+        </div>
+        <div class="msg" id="confirm-msg"></div>
+      </div>
+
+      <button type="submit" class="submit">Sign up</button>
+    </form>
+
+    <p class="footer-link">Already have an account? <a href="/myapp/login/">Log in</a></p>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('signup-form');
+  const fullName = document.getElementById('full_name');
+  const email = document.getElementById('email');
+  const age = document.getElementById('age');
+  const place = document.getElementById('place');
+  const phone = document.getElementById('phone');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirm-password');
+  const strengthFill = document.getElementById('strength-fill');
+
+  document.querySelectorAll('.toggle-pw').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const isHidden = target.type === 'password';
+      target.type = isHidden ? 'text' : 'password';
+      btn.textContent = isHidden ? 'HIDE' : 'SHOW';
+    });
+  });
+
+  password.addEventListener('input', () => {
+    const val = password.value;
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const pct = (score / 4) * 100;
+    strengthFill.style.width = pct + '%';
+    strengthFill.style.background =
+      score <= 1 ? '#e6685e' :
+      score === 2 ? '#e6a95e' :
+      score === 3 ? '#d9e65e' : '#5ee6c4';
+  });
+
+  function setError(input, msgEl, text) {
+    input.classList.toggle('invalid', !!text);
+    msgEl.textContent = text || '';
+  }
+
+  function validate() {
+    let valid = true;
+
+    if (fullName.value.trim().length < 2) {
+      setError(fullName, document.getElementById('full_name-msg'), 'Enter your full name.');
+      valid = false;
+    } else {
+      setError(fullName, document.getElementById('full_name-msg'), '');
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email.value.trim())) {
+      setError(email, document.getElementById('email-msg'), 'Enter a valid email address.');
+      valid = false;
+    } else {
+      setError(email, document.getElementById('email-msg'), '');
+    }
+
+    const ageVal = parseInt(age.value, 10);
+    if (!ageVal || ageVal < 10 || ageVal > 100) {
+      setError(age, document.getElementById('age-msg'), 'Enter a valid age.');
+      valid = false;
+    } else {
+      setError(age, document.getElementById('age-msg'), '');
+    }
+
+    if (place.value.trim().length < 2) {
+      setError(place, document.getElementById('place-msg'), 'Enter your place/city.');
+      valid = false;
+    } else {
+      setError(place, document.getElementById('place-msg'), '');
+    }
+
+    if (phone.value.trim() !== '' && !/^[0-9]{10}$/.test(phone.value.trim())) {
+      setError(phone, document.getElementById('phone-msg'), 'Enter a valid 10-digit number.');
+      valid = false;
+    } else {
+      setError(phone, document.getElementById('phone-msg'), '');
+    }
+
+
+    if (password.value.length < 8) {
+      setError(password, document.getElementById('password-msg'), 'Password must be at least 8 characters.');
+      valid = false;
+    } else {
+      setError(password, document.getElementById('password-msg'), '');
+    }
+
+    if (confirmPassword.value !== password.value || confirmPassword.value === '') {
+      setError(confirmPassword, document.getElementById('confirm-msg'), 'Passwords do not match.');
+      valid = false;
+    } else {
+      setError(confirmPassword, document.getElementById('confirm-msg'), '');
+    }
+
+    return valid;
+  }
+
+  form.addEventListener('submit', (e) => {
+    if (!validate()) {
+      e.preventDefault();
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Login · PathFinder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#171a21;
+    --panel-dark:#1c2028;
+    --panel-darker:#14171d;
+    --paper:#14171d;
+    --paper-line:#2a2f39;
+    --card-fill:#1a1e26;
+    --input-fill:#20242e;
+    --teal:#5fc0aa;
+    --teal-glow:rgba(95,192,170,0.28);
+    --amber:#e2a63b;
+    --amber-hover:#eeb653;
+    --muted:#9aa1ad;
+    --muted-light:#7c8a86;
+    --error:#e08277;
+    --text-primary:#eceae3;
+    --text-secondary:#9aa1ad;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    color:var(--text-primary);
+  }
+
+  body{
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+  }
+
+  .wrap{
+    display:flex;
+    width:100%;
+    min-height:100vh;
+  }
+
+  /* ---------- LEFT: identity / signature panel ---------- */
+  .panel-left{
+    flex:1.05;
+    position:relative;
+    background:
+      radial-gradient(circle at 15% 12%, rgba(79,168,150,0.14), transparent 45%),
+      var(--panel-dark);
+    color:#f1efe9;
+    padding:64px 60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    overflow:hidden;
+    border-right:1px solid rgba(255,255,255,0.06);
+  }
+
+  .panel-left::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.035) 0px,
+      rgba(255,255,255,0.035) 1px,
+      transparent 1px,
+      transparent 34px
+    );
+    pointer-events:none;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.06em;
+    color:var(--teal);
+    z-index:1;
+  }
+  .brand .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-glow);
+  }
+
+  .hero{ z-index:1; max-width:460px; }
+
+  .hero .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin-bottom:18px;
+  }
+  .hero .eyebrow .caret{
+    display:inline-block;
+    width:7px; height:14px;
+    background:var(--amber);
+    margin-left:3px;
+    vertical-align:-2px;
+    animation:blink 1.1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero h1{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    font-size:44px;
+    line-height:1.16;
+    margin:0 0 20px 0;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--teal);
+  }
+
+  .hero p{
+    font-size:15px;
+    line-height:1.65;
+    color:var(--muted);
+    margin:0;
+  }
+
+  .skillscan{
+    z-index:1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:38px;
+    max-width:480px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:#cfd3ce;
+    background:rgba(255,255,255,0.045);
+    border:1px solid rgba(255,255,255,0.09);
+    padding:6px 12px;
+    border-radius:5px;
+    opacity:0;
+    animation:rise 0.5s ease forwards;
+  }
+  .chip.match{
+    color:#0f1712;
+    background:var(--teal);
+    border-color:var(--teal);
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .panel-left .foot{
+    z-index:1;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:#5b625e;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* ---------- RIGHT: form panel ---------- */
+  .panel-right{
+    flex:0.95;
+    background:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px 32px;
+  }
+
+  .panel-right::before{ content:none; }
+
+  .card{
+    width:100%;
+    max-width:380px;
+  }
+
+  .card h2{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    font-size:28px;
+    margin:0 0 6px 0;
+    color:var(--text-primary);
+  }
+  .card .sub{
+    font-size:14px;
+    color:var(--text-secondary);
+    margin:0 0 34px 0;
+  }
+  .card .sub a{
+    color:var(--teal);
+    text-decoration:none;
+    border-bottom:1px solid var(--teal-glow);
+  }
+  .card .sub a:hover{ border-bottom-color:var(--teal); }
+
+  form{ display:flex; flex-direction:column; gap:18px; }
+
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--text-secondary);
+    margin-bottom:7px;
+  }
+
+  .field input{
+    width:100%;
+    padding:12px 14px;
+    font-size:15px;
+    font-family:'IBM Plex Sans', sans-serif;
+    border:1px solid var(--paper-line);
+    border-radius:7px;
+    background:var(--input-fill);
+    color:var(--text-primary);
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input::placeholder{ color:#5c6270; }
+  .field input:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px var(--teal-glow);
+  }
+  .field input:focus-visible{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px var(--teal-glow);
+  }
+  .field.error input{
+    border-color:var(--error);
+  }
+  .field .msg{
+    min-height:16px;
+    font-size:12.5px;
+    color:var(--error);
+    margin-top:5px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  .pw-wrap{ position:relative; }
+  .pw-wrap input{ padding-right:56px; }
+  .pw-toggle{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    color:var(--text-secondary);
+    cursor:pointer;
+    padding:4px 6px;
+  }
+  .pw-toggle:hover{ color:var(--teal); }
+  .pw-toggle:focus-visible{ outline:2px solid var(--teal); border-radius:4px; }
+
+  .row-between{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:13.5px;
+    margin-top:-4px;
+  }
+  .remember{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text-secondary);
+    user-select:none;
+  }
+  .remember input{ accent-color:var(--teal); width:15px; height:15px; }
+  .row-between a{
+    color:var(--teal);
+    text-decoration:none;
+  }
+  .row-between a:hover{ text-decoration:underline; }
+
+  button.submit{
+    margin-top:6px;
+    width:100%;
+    padding:13px 16px;
+    background:var(--amber);
+    color:#241a04;
+    border:none;
+    border-radius:7px;
+    font-size:15px;
+    font-weight:600;
+    font-family:'IBM Plex Sans', sans-serif;
+    cursor:pointer;
+    transition:background .15s ease, transform .05s ease;
+  }
+  button.submit:hover{ background:var(--amber-hover); }
+  button.submit:active{ transform:translateY(1px); }
+  button.submit:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .status{
+    margin-top:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--teal);
+    min-height:14px;
+    text-align:center;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:26px 0 20px 0;
+    color:#565c68;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+  }
+  .divider::before, .divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--paper-line);
+  }
+
+  .footline{
+    text-align:center;
+    font-size:13.5px;
+    color:var(--text-secondary);
+  }
+  .footline a{ color:var(--teal); text-decoration:none; font-weight:500; }
+  .footline a:hover{ text-decoration:underline; }
+
+  @media (max-width: 860px){
+    .wrap{ flex-direction:column; }
+    .panel-left{
+      flex:none;
+      padding:40px 28px;
+      border-right:none;
+    }
+    .hero h1{ font-size:32px; }
+    .panel-right{ flex:none; padding:40px 24px 56px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .chip{ animation:none; opacity:1; }
+    .hero .eyebrow .caret{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Left: signature skill-scan panel -->
+  <div class="panel-left">
+    <div class="brand"><span class="dot"></span> PATHFINDER</div>
+
+    <div class="hero">
+      <div class="eyebrow">reading your transcript<span class="caret"></span></div>
+      <h1>Every language you've learned <em>points somewhere.</em></h1>
+      <p>Sign in to pick up your course recommendations — built from the skills you've already logged, not a generic catalogue.</p>
+
+      <div class="skillscan" id="skillscan"></div>
+    </div>
+
+    <div class="foot">
+      <span>9 tracked skills</span>
+      <span>8 recommended paths</span>
+    </div>
+  </div>
+
+  <!-- Right: login form -->
+  <div class="panel-right">
+    <div class="card">
+      <h2>Student sign in</h2>
+      <p class="sub">New to PathFinder? <a href="/myapp/signup/" id="createLink">Create an account</a></p>
+
+      <form id="loginForm" action="/myapp/login_post/" method="post" novalidate>
+        {% csrf_token %}
+        <div class="field" id="emailField">
+          <label for="email">Email or Roll Number</label>
+          <input type="text" id="email" name="username" placeholder="you@school.edu" autocomplete="username">
+          <div class="msg" id="emailMsg"></div>
+        </div>
+
+        <div class="field" id="pwField">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password">
+            <button type="button" class="pw-toggle" id="pwToggle">SHOW</button>
+          </div>
+          <div class="msg" id="pwMsg">{{error_message}}</div>
+        </div>
+
+        <!-- <div class="row-between">
+          <label class="remember"><input type="checkbox" name="remember"> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div> -->
+
+        <button type="submit" class="submit">Sign in</button>
+        <div class="status" id="status"></div>
+      </form>
+
+    
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Signature element: animated skill scan, ties to the platform's premise
+  const skills = ["HTML","CSS","JavaScript","Java","PHP","Python","SQL","C++","React"];
+  const matched = new Set(["JavaScript","Python","SQL"]); // purely illustrative "matched" skills
+  const scanEl = document.getElementById('skillscan');
+
+  skills.forEach((s, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'chip' + (matched.has(s) ? ' match' : '');
+    chip.textContent = s;
+    chip.style.animationDelay = (i * 0.09) + 's';
+    scanEl.appendChild(chip);
+  });
+
+  // Password show/hide
+  const pwInput = document.getElementById('password');
+  const pwToggle = document.getElementById('pwToggle');
+  pwToggle.addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+    pwToggle.textContent = isPw ? 'HIDE' : 'SHOW';
+  });
+
+  // Simple client-side validation (demo only — no backend wired up)
+  const form = document.getElementById('loginForm');
+  const emailField = document.getElementById('emailField');
+  const emailInput = document.getElementById('email');
+  const emailMsg = document.getElementById('emailMsg');
+  const pwField = document.getElementById('pwField');
+  const pwMsg = document.getElementById('pwMsg');
+  const status = document.getElementById('status');
+
+  function setError(field, msgEl, text){
+    field.classList.add('error');
+    msgEl.textContent = text;
+  }
+  function clearError(field, msgEl){
+    field.classList.remove('error');
+    msgEl.textContent = '';
+  }
+
+form.addEventListener('submit', (e) => {
+    let ok = true;
+
+    clearError(emailField, emailMsg);
+    clearError(pwField, pwMsg);
+    status.textContent = '';
+
+    if (!emailInput.value.trim()) {
+        setError(emailField, emailMsg, 'Enter your email or roll number.');
+        ok = false;
+    }
+
+    if (!pwInput.value) {
+        setError(pwField, pwMsg, 'Enter your password.');
+        ok = false;
+    } 
+    else if (pwInput.value.length < 6) {
+        setError(pwField, pwMsg, 'Password must be at least 6 characters.');
+        ok = false;
+    }
+
+    if (!ok) {
+        e.preventDefault();
+        return;
+    }
+
+    status.textContent = 'Checking credentials…';
+
+    // Don't use e.preventDefault() here.
+    // The form will be submitted to Django.
+});
+
+
+</script>
+
+</body>
+</html>

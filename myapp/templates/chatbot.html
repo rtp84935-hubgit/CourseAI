@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chatbot</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.12), transparent 30%),
+                #070b14;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+            color: white;
+        }
+
+
+        /* ================= MAIN CHAT ================= */
+
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 760px;
+
+            background: #0d121f;
+
+            border: 1px solid #20283a;
+
+            border-radius: 24px;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.65),
+                0 0 80px rgba(99, 102, 241, 0.06);
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .chat-header {
+            height: 82px;
+
+            padding: 0 28px;
+
+            background: #101625;
+
+            border-bottom: 1px solid #20283a;
+
+            display: flex;
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .bot-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 23px;
+
+            box-shadow:
+                0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+
+        .header-text h2 {
+            font-size: 18px;
+            font-weight: 600;
+
+            color: #f8fafc;
+
+            margin-bottom: 4px;
+        }
+
+
+        .header-text p {
+            font-size: 12px;
+
+            color: #7f8ba3;
+        }
+
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #8d99ad;
+
+            font-size: 12px;
+        }
+
+
+        .online {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 10px rgba(34, 197, 94, 0.7);
+        }
+
+
+        /* ================= CHAT BODY ================= */
+
+        .chat-body {
+            flex: 1;
+
+            padding: 30px;
+
+            overflow-y: auto;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #0b101b,
+                    #080c15
+                );
+
+            scroll-behavior: smooth;
+        }
+
+
+        /* ================= WELCOME ================= */
+
+        .welcome {
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+        }
+
+
+        .welcome-icon {
+            width: 90px;
+            height: 90px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 42px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 15px 45px rgba(99, 102, 241, 0.3);
+        }
+
+
+        .welcome h3 {
+            font-size: 28px;
+
+            font-weight: 600;
+
+            margin-bottom: 10px;
+        }
+
+
+        .welcome p {
+            color: #7f8ba3;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        /* ================= MESSAGE ROWS ================= */
+        /* One shared structure for both user & bot messages: an avatar,
+           a small meta line (sender + time), and the message text with
+           a soft inline highlight instead of a full boxed bubble. */
+
+        .msg-row {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 12px;
+
+            margin-bottom: 26px;
+
+            max-width: 100%;
+        }
+
+        .msg-row.user {
+            flex-direction: row-reverse;
+        }
+
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+        }
+
+        .avatar.bot {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+        }
+
+        .avatar.user {
+            background: #1c2638;
+            border: 1px solid #2a354b;
+        }
+
+
+        .msg-content {
+            display: flex;
+            flex-direction: column;
+
+            max-width: 74%;
+        }
+
+        .msg-row.user .msg-content {
+            align-items: flex-end;
+        }
+
+        .msg-row.bot .msg-content {
+            align-items: flex-start;
+        }
+
+
+        .msg-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+
+            margin-bottom: 6px;
+
+            font-size: 11px;
+        }
+
+        .msg-name {
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .msg-row.user .msg-name {
+            color: #a5b4fc;
+        }
+
+        .msg-row.bot .msg-name {
+            color: #7f8ba3;
+        }
+
+        .msg-time {
+            color: #4f5c71;
+            font-style: italic;
+        }
+
+
+        /* The text itself carries a soft inline highlight (not a card):
+           box-decoration-break keeps the highlight snug per wrapped line
+           instead of one big rectangle behind the whole paragraph.
+           white-space: pre-line collapses any repeated blank lines coming
+           from the AI response, so stray blank lines never show as empty
+           gaps -- single intentional line breaks are still respected. */
+        .msg-text {
+            font-size: 15px;
+            line-height: 1.85;
+
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-line;
+
+            padding: 3px 10px;
+            border-radius: 6px;
+
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .msg-row.user .msg-text {
+            color: #ede9fe;
+            font-weight: 500;
+            text-align: right;
+            background: rgba(99, 102, 241, 0.18);
+        }
+
+        .msg-row.bot .msg-text {
+            color: #dce3ef;
+            font-weight: 400;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.045);
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        .chat-footer {
+            padding: 20px 24px;
+
+            background: #101625;
+
+            border-top: 1px solid #20283a;
+        }
+
+
+        form {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .input-box {
+            flex: 1;
+
+            position: relative;
+        }
+
+
+        input[type="text"] {
+            width: 100%;
+
+            height: 54px;
+
+            padding:
+                0 20px;
+
+            outline: none;
+
+            border-radius: 16px;
+
+            background: #0a0f1a;
+
+            border: 1px solid #283247;
+
+            color: #f8fafc;
+
+            font-size: 14px;
+
+            transition: 0.25s;
+        }
+
+.new-chat-btn {
+    width: auto;
+    height: 40px;
+
+    padding: 0 16px;
+
+    border: 1px solid #2c3850;
+    border-radius: 12px;
+
+    background: #151c2b;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    transition: all 0.25s ease;
+
+    box-shadow: none;
+
+    text-decoration: none;
+}
+
+.new-chat-btn span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.new-chat-btn:hover {
+    background: #1d2638;
+
+    border-color: #6366f1;
+
+    color: white;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 18px rgba(99, 102, 241, 0.18);
+}
+
+        input[type="text"]::placeholder {
+            color: #59667d;
+        }
+
+
+        input[type="text"]:focus {
+            border-color: #6366f1;
+
+            background: #0c1220;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99, 102, 241, 0.10);
+        }
+
+
+        /* ================= SEND BUTTON ================= */
+
+        button {
+            width: 54px;
+            height: 54px;
+
+            border: none;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: 0.25s;
+
+            box-shadow:
+                0 8px 22px
+                rgba(99, 102, 241, 0.2);
+        }
+
+
+        button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 28px
+                rgba(99, 102, 241, 0.35);
+        }
+
+
+        button:active {
+            transform: scale(0.94);
+        }
+
+
+        /* ================= FOOTER TEXT ================= */
+
+        .footer-text {
+            text-align: center;
+
+            color: #4f5c71;
+
+            font-size: 10px;
+
+            margin-top: 10px;
+        }
+
+
+        /* ================= SCROLLBAR ================= */
+
+        .chat-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+
+        .chat-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-body::-webkit-scrollbar-thumb {
+            background: #303b55;
+
+            border-radius: 10px;
+        }
+
+
+        .chat-body::-webkit-scrollbar-thumb:hover {
+            background: #4b5875;
+        }
+
+
+        .back {
+            color: #7f8ba3;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            color: #a5b4fc;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 0;
+            }
+
+
+            .chat-container {
+                width: 100%;
+                height: 100vh;
+
+                max-width: none;
+
+                border-radius: 0;
+
+                border: none;
+            }
+
+
+            .chat-header {
+                padding: 0 18px;
+
+                flex-wrap: wrap;
+                height: auto;
+
+                gap: 10px 0;
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+
+
+            .chat-body {
+                padding: 20px 15px;
+            }
+
+
+            .chat-footer {
+                padding: 14px;
+            }
+
+
+            .msg-content {
+                max-width: 88%;
+            }
+
+
+            .welcome h3 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="chat-container">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="chat-header">
+
+        <div class="header-left">
+
+            <div class="bot-icon">
+                🤖
+            </div>
+
+            <div class="header-text">
+
+                <h2>
+                    AI Assistant
+                </h2>
+
+                <p>
+                    Your intelligent virtual assistant
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="status">
+          <a href="/myapp/newchat/" class="new-chat-btn">
+    <span>＋</span>
+    New Chat
+          </a>
+            <span class="online"></span>
+
+            Online
+
+        </div>
+
+        <a href="/myapp/home/" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+
+    <!-- ================= CHAT BODY ================= -->
+
+    <div class="chat-body" id="chatBody">
+
+
+        {% if data %}
+
+
+            {% for chat in data %}
+
+
+                <!-- USER QUESTION -->
+
+                <div class="msg-row user">
+
+                    <div class="avatar user">
+                        👤
+                    </div>
+
+                    <div class="msg-content">
+
+                        <div class="msg-meta">
+                            <span class="msg-name">You</span>
+
+                            {% if chat.datetime %}
+                                <span class="msg-time">{{ chat.datetime|date:"d M Y, h:i A" }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="msg-text">
+                            {{ chat.question }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BOT ANSWER -->
+
+                <div class="msg-row bot">
+
+                    <div class="avatar bot">
+                        🤖
+                    </div>
+
+                    <div class="msg-content">
+
+                        <div class="msg-meta">
+                            <span class="msg-name">AI Assistant</span>
+                        </div>
+
+                        <div class="msg-text">
+                            {{ chat.answer }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- ================= WELCOME ================= -->
+
+            <div class="welcome">
+
+                <div class="welcome-icon">
+
+                    🤖
+
+                </div>
+
+
+                <h3>
+
+                    Welcome to AI Assistant
+
+                </h3>
+
+
+                <p>
+
+                    Ask me anything and I'll do my best to help you.
+
+                    <br>
+
+                    Start a conversation below.
+
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- ================= INPUT ================= -->
+
+    <div class="chat-footer">
+
+
+        <form
+            action="/myapp/chatbotmsg/"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="input-box">
+
+                <input
+                    type="text"
+                    name="text"
+                    placeholder="Ask something..."
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit">
+
+                ➤
+
+            </button>
+
+
+        </form>
+
+
+        <div class="footer-text">
+
+            AI responses may not always be accurate
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ================= AUTO SCROLL ================= -->
+
+<script>
+
+    const chatBody =
+        document.getElementById("chatBody");
+
+    chatBody.scrollTop =
+        chatBody.scrollHeight;
+
+</script>
+
+
+</body>
+
+</html>

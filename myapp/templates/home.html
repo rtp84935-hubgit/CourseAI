@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Course Compass — Home</title>
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0E1220;
+    --bg-soft: #131829;
+    --surface: #171D30;
+    --surface-hover: #1D243B;
+
+    --ink: #E7E9F2;
+    --ink-soft: #8E95AC;
+
+    --accent: #E2A33B;
+    --accent-soft: rgba(226,163,59,0.14);
+
+    --path: #57B79B;
+    --path-soft: rgba(87,183,155,0.14);
+
+    --violet: #8C8CF0;
+    --violet-soft: rgba(140,140,240,0.14);
+
+    --blue: #5BA7F5;
+    --blue-soft: rgba(91,167,245,0.14);
+
+    --line: #262E48;
+
+    --radius: 16px;
+
+    --shadow:
+      0 1px 2px rgba(0,0,0,0.3),
+      0 20px 40px rgba(0,0,0,0.35);
+  }
+
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+
+  body {
+    background:
+      radial-gradient(
+        circle at 15% 0%,
+        rgba(140,140,240,0.10),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 85% 20%,
+        rgba(226,163,59,0.08),
+        transparent 45%
+      ),
+      var(--bg);
+
+    color: var(--ink);
+
+    font-family: 'Inter', system-ui, sans-serif;
+
+    min-height: 100vh;
+  }
+
+
+  /* =========================
+     NAVBAR
+  ========================= */
+
+  header.topbar {
+
+    background: rgba(19,24,41,0.75);
+
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid var(--line);
+
+    padding: 1rem 2rem;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 20;
+  }
+
+
+  .brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: #fff;
+
+    font-family: 'Fraunces', serif;
+
+    font-weight: 700;
+
+    font-size: 1.25rem;
+  }
+
+
+  .brand .mark {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 3px;
+  }
+
+
+  .brand .mark span {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--accent);
+
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+
+  .brand .mark span:nth-child(2) {
+
+    background: var(--path);
+
+    box-shadow: 0 0 8px var(--path);
+  }
+
+
+  .brand .mark::after {
+
+    content: "";
+
+    width: 18px;
+
+    height: 1px;
+
+    background: var(--line);
+  }
+
+
+  header.topbar nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.4rem;
+  }
+
+
+  header.topbar nav a {
+
+    color: var(--ink-soft);
+
+    text-decoration: none;
+
+    font-size: 0.88rem;
+
+    padding: 0.45rem 0.9rem;
+
+    border-radius: 8px;
+
+    transition:
+      color 0.15s ease,
+      background 0.15s ease;
+  }
+
+
+  header.topbar nav a:hover {
+
+    color: var(--ink);
+
+    background: var(--surface-hover);
+  }
+
+
+  /* Theme Button */
+
+  #themeToggle {
+
+    background: var(--surface);
+
+    border: 1px solid var(--line);
+
+    color: var(--ink);
+
+    border-radius: 999px;
+
+    width: 34px;
+
+    height: 34px;
+
+    font-size: 0.95rem;
+
+    cursor: pointer;
+
+    margin-left: 0.5rem;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+      transform 0.2s ease,
+      background 0.15s ease;
+  }
+
+
+  #themeToggle:hover {
+
+    background: var(--surface-hover);
+
+    transform: rotate(20deg);
+  }
+
+
+  /* =========================
+     HERO
+  ========================= */
+
+  .hero {
+
+    padding: 4rem 2rem 4.5rem;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+  }
+
+
+  .hero .eyebrow {
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 0.72rem;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+
+    color: var(--accent);
+
+    margin-bottom: 0.8rem;
+
+    opacity: 0;
+
+    animation:
+      fadeUp 0.6s ease forwards;
+  }
+
+
+  .hero h1 {
+
+    font-family: 'Fraunces', serif;
+
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+
+    margin-bottom: 0.8rem;
+
+    opacity: 0;
+
+    animation:
+      fadeUp 0.6s ease 0.1s forwards;
+  }
+
+
+  .hero h1 .type-cursor {
+
+    display: inline-block;
+
+    width: 3px;
+
+    background: var(--accent);
+
+    margin-left: 3px;
+
+    animation:
+      blink 1s step-end infinite;
+  }
+
+
+  .hero p {
+
+    color: var(--ink-soft);
+
+    max-width: 48ch;
+
+    margin: 0 auto;
+
+    font-size: 1rem;
+
+    opacity: 0;
+
+    animation:
+      fadeUp 0.6s ease 0.2s forwards;
+  }
+
+
+  @keyframes fadeUp {
+
+    from {
+
+      opacity: 0;
+
+      transform: translateY(14px);
+    }
+
+    to {
+
+      opacity: 1;
+
+      transform: translateY(0);
+    }
+  }
+
+
+  @keyframes blink {
+
+    50% {
+
+      opacity: 0;
+    }
+  }
+
+
+  /* =========================
+     FILTERS
+  ========================= */
+
+  .filters {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 0.6rem;
+
+    flex-wrap: wrap;
+
+    margin-top: 1.8rem;
+
+    opacity: 0;
+
+    animation:
+      fadeUp 0.6s ease 0.3s forwards;
+  }
+
+
+  .filter-btn {
+
+    background: var(--surface);
+
+    border: 1px solid var(--line);
+
+    color: var(--ink-soft);
+
+    font-size: 0.82rem;
+
+    padding: 0.45rem 1rem;
+
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+  }
+
+
+  .filter-btn:hover {
+
+    color: var(--ink);
+
+    border-color: var(--accent);
+  }
+
+
+  .filter-btn.active {
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    border-color: var(--accent);
+  }
+
+
+  /* =========================
+     MAIN
+  ========================= */
+
+  main {
+
+    max-width: 1100px;
+
+    margin: 2.5rem auto 3rem;
+
+    padding: 0 2rem;
+  }
+
+
+  .options {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 1.4rem;
+  }
+
+
+  /* =========================
+     CARDS
+  ========================= */
+
+  .card {
+
+    --spot-x: 50%;
+
+    --spot-y: 0%;
+
+    position: relative;
+
+    background: var(--surface);
+
+    border: 1px solid var(--line);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    padding: 2rem 1.6rem;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    color: var(--ink);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.9rem;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+
+  .card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+      radial-gradient(
+        240px circle at var(--spot-x) var(--spot-y),
+        var(--glow, rgba(226,163,59,0.12)),
+        transparent 70%
+      );
+
+    opacity: 0;
+
+    transition:
+      opacity 0.25s ease;
+
+    pointer-events: none;
+  }
+
+
+  .card:hover::before {
+
+    opacity: 1;
+  }
+
+
+  .card:hover {
+
+    transform: translateY(-5px);
+
+    border-color: var(--accent);
+
+    background: var(--surface-hover);
+  }
+
+
+  .card:nth-child(2):hover {
+
+    border-color: var(--path);
+  }
+
+
+  .card:nth-child(3):hover {
+
+    border-color: var(--violet);
+  }
+
+
+  .card:nth-child(4):hover {
+
+    border-color: var(--blue);
+  }
+
+
+  .card:active {
+
+    transform:
+      translateY(-2px)
+      scale(0.99);
+  }
+
+
+  /* =========================
+     CARD ICON
+  ========================= */
+
+  .card .icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 1.4rem;
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    transition:
+      transform 0.25s ease;
+  }
+
+
+  .card:hover .icon {
+
+    transform:
+      scale(1.1)
+      rotate(-4deg);
+  }
+
+
+  .card:nth-child(2) .icon {
+
+    background: var(--path-soft);
+
+    color: var(--path);
+  }
+
+
+  .card:nth-child(3) .icon {
+
+    background: var(--violet-soft);
+
+    color: var(--violet);
+  }
+
+
+  .card:nth-child(4) .icon {
+
+    background: var(--blue-soft);
+
+    color: var(--blue);
+  }
+
+
+  /* =========================
+     CARD TEXT
+  ========================= */
+
+  .card h2 {
+
+    font-family: 'Fraunces', serif;
+
+    font-size: 1.25rem;
+
+    color: var(--ink);
+
+    position: relative;
+  }
+
+
+  .card p {
+
+    color: var(--ink-soft);
+
+    font-size: 0.9rem;
+
+    line-height: 1.55;
+
+    flex-grow: 1;
+
+    position: relative;
+  }
+
+
+  .card .go {
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    color: var(--ink-soft);
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.35rem;
+
+    position: relative;
+
+    transition:
+      gap 0.15s ease,
+      color 0.15s ease;
+  }
+
+
+  .card:hover .go {
+
+    color: var(--accent);
+
+    gap: 0.55rem;
+  }
+
+
+  .card:nth-child(2):hover .go {
+
+    color: var(--path);
+  }
+
+
+  .card:nth-child(3):hover .go {
+
+    color: var(--violet);
+  }
+
+
+  .card:nth-child(4):hover .go {
+
+    color: var(--blue);
+  }
+
+
+  /* =========================
+     RIPPLE
+  ========================= */
+
+  .ripple {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background:
+      rgba(255,255,255,0.18);
+
+    transform: scale(0);
+
+    animation:
+      ripple 0.6s ease-out;
+
+    pointer-events: none;
+  }
+
+
+  @keyframes ripple {
+
+    to {
+
+      transform: scale(3.2);
+
+      opacity: 0;
+    }
+  }
+
+
+  /* =========================
+     CARD ENTRANCE
+  ========================= */
+
+  .card {
+
+    opacity: 0;
+
+    animation:
+      fadeUp 0.5s ease forwards;
+  }
+
+
+  .card:nth-child(1) {
+
+    animation-delay: 0.35s;
+  }
+
+
+  .card:nth-child(2) {
+
+    animation-delay: 0.45s;
+  }
+
+
+  .card:nth-child(3) {
+
+    animation-delay: 0.55s;
+  }
+
+
+  .card:nth-child(4) {
+
+    animation-delay: 0.65s;
+  }
+
+
+  /* =========================
+     FOOTER
+  ========================= */
+
+  footer {
+
+    text-align: center;
+
+    color: var(--ink-soft);
+
+    font-size: 0.82rem;
+
+    padding: 1.6rem;
+
+    border-top: 1px solid var(--line);
+  }
+
+
+  /* =========================
+     RESPONSIVE
+  ========================= */
+
+  @media (max-width: 560px) {
+
+    header.topbar {
+
+      flex-wrap: wrap;
+
+      gap: 0.6rem;
+    }
+
+
+    .hero {
+
+      padding:
+        3rem 1.2rem 3rem;
+    }
+
+
+    main {
+
+      padding:
+        0 1.2rem;
+    }
+
+
+    .options {
+
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* =========================
+     LIGHT MODE
+  ========================= */
+
+  html.light-mode body {
+
+    background:
+      radial-gradient(
+        circle at 15% 0%,
+        rgba(140,140,240,0.06),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 85% 20%,
+        rgba(226,163,59,0.06),
+        transparent 45%
+      ),
+      #F1F3F7;
+
+    color: #1B2233;
+  }
+
+
+  html.light-mode {
+
+    --ink: #1B2233;
+  }
+
+
+  html.light-mode header.topbar {
+
+    background:
+      rgba(255,255,255,0.75);
+
+    border-color: #DFE3EC;
+  }
+
+
+  html.light-mode .brand {
+
+    color: #171E38;
+  }
+
+
+  html.light-mode header.topbar nav a {
+
+    color: #5B6478;
+  }
+
+
+  html.light-mode header.topbar nav a:hover {
+
+    color: #1B2233;
+  }
+
+
+  html.light-mode .card {
+
+    background: #FFFFFF;
+
+    border-color: #DFE3EC;
+
+    color: #1B2233;
+  }
+
+
+  html.light-mode .card:hover {
+
+    background: #FFFFFF;
+  }
+
+
+  html.light-mode .card p {
+
+    color: #5B6478;
+  }
+
+
+  html.light-mode .card h2 {
+
+    color: #171E38;
+  }
+
+
+  html.light-mode .filter-btn {
+
+    background: #FFFFFF;
+
+    border-color: #DFE3EC;
+
+    color: #5B6478;
+  }
+
+
+  html.light-mode .filter-btn.active {
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    border-color: var(--accent);
+  }
+
+
+  html.light-mode footer {
+
+    color: #5B6478;
+
+    border-color: #DFE3EC;
+  }
+
+
+  html.light-mode #themeToggle {
+
+    background: #FFFFFF;
+
+    border-color: #DFE3EC;
+
+    color: #1B2233;
+  }
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="topbar">
+
+  <div class="brand">
+
+    <span class="mark">
+
+      <span></span>
+
+      <span></span>
+
+    </span>
+
+    Course Compass
+
+  </div>
+
+
+  <nav>
+
+    <a href="/myapp/home/">
+      Dashboard
+    </a>
+
+    <a href="/myapp/profile/">
+      Profile
+    </a>
+
+    <a href="/myapp/logout/">
+      Log out
+    </a>
+
+    <button
+      id="themeToggle"
+      title="Toggle theme">
+
+      🌙
+
+    </button>
+
+  </nav>
+
+</header>
+
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+  <div class="eyebrow">
+    Home
+  </div>
+
+
+  <h1 id="typedHeading"></h1>
+
+
+  <p>
+    Get course recommendations, predict your marks,
+    translate content, or ask our AI assistant —
+    all powered by machine learning.
+  </p>
+
+
+  <!-- FILTERS -->
+
+  <div class="filters">
+
+    <button
+      class="filter-btn active"
+      data-filter="all">
+
+      All
+
+    </button>
+
+
+    <button
+      class="filter-btn"
+      data-filter="courses">
+
+      Courses
+
+    </button>
+
+
+    <button
+      class="filter-btn"
+      data-filter="predict">
+
+      Prediction
+
+    </button>
+
+
+    <button
+      class="filter-btn"
+      data-filter="chat">
+
+      Assistant
+
+    </button>
+
+
+    <button
+      class="filter-btn"
+      data-filter="translator">
+
+      Translator
+
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     MAIN CARDS
+========================= -->
+
+<main>
+
+  <div
+    class="options"
+    id="optionsGrid">
+
+
+    <!-- COURSE SUGGESTION -->
+
+    <a
+      href="/myapp/course_prediction/"
+      class="card"
+      data-tags="courses"
+      style="--glow: rgba(226,163,59,0.14);">
+
+      <div class="icon">
+        🎓
+      </div>
+
+
+      <h2>
+        Course Suggestion
+      </h2>
+
+
+      <p>
+        Get personalised course recommendations
+        based on your interests, past performance,
+        and learning goals.
+      </p>
+
+
+      <span class="go">
+        Explore courses →
+      </span>
+
+    </a>
+
+
+
+    <!-- MARK PREDICTION -->
+
+    <a
+      href="/myapp/markprediction/"
+      class="card"
+      data-tags="predict"
+      style="--glow: rgba(87,183,155,0.14);">
+
+      <div class="icon">
+        📊
+      </div>
+
+
+      <h2>
+        Mark Prediction
+      </h2>
+
+
+      <p>
+        Predict your likely exam marks from your
+        study habits, attendance, and past scores
+        using our ML model.
+      </p>
+
+
+      <span class="go">
+        Predict my marks →
+      </span>
+
+    </a>
+
+
+
+    <!-- AI CHATBOT -->
+
+    <a
+      href="/myapp/chatbot/"
+      class="card"
+      data-tags="chat"
+      style="--glow: rgba(140,140,240,0.14);">
+
+      <div class="icon">
+        💬
+      </div>
+
+
+      <h2>
+        AI Chat Bot
+      </h2>
+
+
+      <p>
+        Ask questions about courses, career paths,
+        or anything else — get instant answers
+        from the assistant.
+      </p>
+
+
+      <span class="go">
+        Start chatting →
+      </span>
+
+    </a>
+
+
+
+    <!-- LANGUAGE TRANSLATOR -->
+
+    <a
+      href="/myapp/Translator/"
+      class="card"
+      data-tags="translator"
+      style="--glow: rgba(91,167,245,0.14);">
+
+      <div class="icon">
+        🌐
+      </div>
+
+
+      <h2>
+        Language Translator
+      </h2>
+
+
+      <p>
+        Translate course information, study materials,
+        and other educational content into Malayalam,
+        English, Hindi, Tamil, and more.
+      </p>
+
+
+      <span class="go">
+        Translate text →
+      </span>
+
+    </a>
+
+
+  </div>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  Course Compass &middot;
+  ML-powered student assistant
+
+</footer>
+
+
+
+<script>
+
+  /* =========================
+     TYPED HEADING
+  ========================= */
+
+  const heading =
+    document.getElementById('typedHeading');
+
+  const fullText =
+    "What would you like to do today?";
+
+  let i = 0;
+
+
+  function typeChar() {
+
+    if (i <= fullText.length) {
+
+      heading.innerHTML =
+        fullText.slice(0, i) +
+        '<span class="type-cursor">&nbsp;</span>';
+
+      i++;
+
+      setTimeout(typeChar, 28);
+
+    } else {
+
+      heading.innerHTML =
+        fullText +
+        '<span class="type-cursor">&nbsp;</span>';
+
+    }
+
+  }
+
+
+  typeChar();
+
+
+
+  /* =========================
+     CURSOR FOLLOW GLOW
+  ========================= */
+
+  document
+    .querySelectorAll('.card')
+    .forEach(card => {
+
+      card.addEventListener(
+        'mousemove',
+        (e) => {
+
+          const rect =
+            card.getBoundingClientRect();
+
+
+          card.style.setProperty(
+            '--spot-x',
+            (e.clientX - rect.left) + 'px'
+          );
+
+
+          card.style.setProperty(
+            '--spot-y',
+            (e.clientY - rect.top) + 'px'
+          );
+
+        }
+      );
+
+
+      /* =========================
+         RIPPLE EFFECT
+      ========================= */
+
+      card.addEventListener(
+        'click',
+        function(e) {
+
+          const rect =
+            card.getBoundingClientRect();
+
+
+          const ripple =
+            document.createElement('span');
+
+
+          const size =
+            Math.max(
+              rect.width,
+              rect.height
+            );
+
+
+          ripple.className =
+            'ripple';
+
+
+          ripple.style.width =
+            ripple.style.height =
+            size + 'px';
+
+
+          ripple.style.left =
+            (e.clientX -
+             rect.left -
+             size / 2) + 'px';
+
+
+          ripple.style.top =
+            (e.clientY -
+             rect.top -
+             size / 2) + 'px';
+
+
+          card.appendChild(ripple);
+
+
+          setTimeout(
+            () => ripple.remove(),
+            600
+          );
+
+        }
+      );
+
+    });
+
+
+
+  /* =========================
+     FILTER BUTTONS
+  ========================= */
+
+  const filterBtns =
+    document.querySelectorAll(
+      '.filter-btn'
+    );
+
+
+  const cards =
+    document.querySelectorAll(
+      '#optionsGrid .card'
+    );
+
+
+  filterBtns.forEach(btn => {
+
+    btn.addEventListener(
+      'click',
+      () => {
+
+        filterBtns.forEach(b =>
+          b.classList.remove('active')
+        );
+
+
+        btn.classList.add('active');
+
+
+        const filter =
+          btn.dataset.filter;
+
+
+        cards.forEach(card => {
+
+          const show =
+            filter === 'all' ||
+            card.dataset.tags === filter;
+
+
+          card.style.display =
+            show ? 'flex' : 'none';
+
+        });
+
+      }
+    );
+
+  });
+
+
+
+  /* =========================
+     LIGHT / DARK THEME
+  ========================= */
+
+  const toggle =
+    document.getElementById(
+      'themeToggle'
+    );
+
+
+  let isDark = true;
+
+
+  toggle.addEventListener(
+    'click',
+    () => {
+
+      isDark = !isDark;
+
+
+      document.documentElement
+        .classList
+        .toggle(
+          'light-mode',
+          !isDark
+        );
+
+
+      toggle.textContent =
+        isDark ? '🌙' : '☀️';
+
+    }
+  );
+
+</script>
+
+
+</body>
+</html>
+

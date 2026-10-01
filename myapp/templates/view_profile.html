@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Profile · PathFinder</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --ink:#171a21;
+    --panel-dark:#1c2028;
+    --paper:#14171d;
+    --paper-line:#2a2f39;
+    --input-fill:#20242e;
+    --teal:#5fc0aa;
+    --teal-glow:rgba(95,192,170,0.28);
+    --amber:#e2a63b;
+    --amber-hover:#eeb653;
+    --muted:#9aa1ad;
+    --text-primary:#eceae3;
+    --text-secondary:#9aa1ad;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--text-primary);
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+}
+
+/* MAIN */
+
+.profile-container{
+    width:100%;
+    max-width:900px;
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:.08em;
+    color:var(--teal);
+}
+
+.brand .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-glow);
+}
+
+.back{
+    color:var(--text-secondary);
+    text-decoration:none;
+    font-size:14px;
+}
+
+.back:hover{
+    color:var(--teal);
+}
+
+/* PROFILE CARD */
+
+.profile-card{
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+/* TOP */
+
+.profile-top{
+    padding:40px;
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(79,168,150,.12),
+            transparent 45%
+        ),
+        var(--panel-dark);
+
+    border-bottom:1px solid var(--paper-line);
+}
+
+.profile-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--teal);
+    margin-bottom:10px;
+}
+
+.profile-top h1{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:42px;
+    margin:0 0 8px;
+}
+
+.profile-top p{
+    margin:0;
+    color:var(--muted);
+    font-size:15px;
+}
+
+/* DETAILS */
+
+.details{
+    padding:35px 40px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.detail{
+    background:var(--input-fill);
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:18px 20px;
+}
+
+.detail-label{
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:10px;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+}
+
+.detail-value{
+    font-size:16px;
+    color:var(--text-primary);
+    word-break:break-word;
+}
+
+/* ACTIONS */
+
+.actions{
+    padding:0 40px 40px;
+
+    display:flex;
+    gap:12px;
+}
+
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:7px;
+    font-size:14px;
+    font-weight:600;
+    transition:.15s ease;
+}
+
+.edit{
+    background:var(--amber);
+    color:#241a04;
+}
+
+.edit:hover{
+    background:var(--amber-hover);
+}
+
+.logout{
+    border:1px solid var(--paper-line);
+    color:var(--text-secondary);
+}
+
+.logout:hover{
+    border-color:var(--teal);
+    color:var(--teal);
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    body{
+        padding:20px 15px;
+    }
+
+    .profile-top{
+        padding:30px 25px;
+    }
+
+    .profile-top h1{
+        font-size:34px;
+    }
+
+    .details{
+        padding:25px;
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .actions{
+        padding:0 25px 30px;
+        flex-direction:column;
+    }
+
+    .btn{
+        text-align:center;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="profile-container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="brand">
+            <span class="dot"></span>
+            PATHFINDER
+        </div>
+
+        <a href="/myapp/home/" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- PROFILE CARD -->
+
+    <div class="profile-card">
+
+        <div class="profile-top">
+
+            <div class="profile-label">
+                Student Profile
+            </div>
+
+            <h1>{{ profile.full_name }}</h1>
+
+            <p>
+                Your personal information and account details
+            </p>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details">
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Full Name
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.full_name }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Email
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.email }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Age
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.age }} years
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Gender
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.gender }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Place
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.place }}
+                </div>
+
+            </div>
+
+
+            <div class="detail">
+
+                <div class="detail-label">
+                    Phone
+                </div>
+
+                <div class="detail-value">
+                    {{ profile.phone }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="actions">
+
+            <a href="/myapp/edit_profile/" class="btn edit">
+                Edit Profile
+            </a>
+
+            <a href="/myapp/logout/" class="btn logout">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+

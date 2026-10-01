@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Profile · PathFinder</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --ink:#171a21;
+    --panel-dark:#1c2028;
+    --paper:#14171d;
+    --paper-line:#2a2f39;
+    --input-fill:#20242e;
+    --teal:#5fc0aa;
+    --teal-glow:rgba(95,192,170,0.28);
+    --amber:#e2a63b;
+    --amber-hover:#eeb653;
+    --muted:#9aa1ad;
+    --text-primary:#eceae3;
+    --text-secondary:#9aa1ad;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--text-primary);
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    padding:45px 20px;
+}
+
+.container{
+    width:100%;
+    max-width:800px;
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:.08em;
+    color:var(--teal);
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-glow);
+}
+
+.back{
+    color:var(--text-secondary);
+    text-decoration:none;
+    font-size:14px;
+}
+
+.back:hover{
+    color:var(--teal);
+}
+
+/* CARD */
+
+.card{
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+/* TITLE */
+
+.card-header{
+    padding:35px 40px;
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(79,168,150,.12),
+            transparent 45%
+        ),
+        var(--panel-dark);
+
+    border-bottom:1px solid var(--paper-line);
+}
+
+.label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--teal);
+    margin-bottom:8px;
+}
+
+h1{
+    font-family:'Newsreader',serif;
+    font-size:40px;
+    font-weight:500;
+    margin:0 0 7px;
+}
+
+.subtitle{
+    margin:0;
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* FORM */
+
+.form{
+    padding:35px 40px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field.full{
+    grid-column:1 / -1;
+}
+
+label{
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:11px;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px 14px;
+
+    border:1px solid var(--paper-line);
+    border-radius:7px;
+
+    background:var(--input-fill);
+    color:var(--text-primary);
+
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:15px;
+
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px var(--teal-glow);
+}
+
+input:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+select option{
+    background:var(--input-fill);
+}
+
+/* BUTTONS */
+
+.actions{
+    padding:0 40px 35px;
+
+    display:flex;
+    gap:12px;
+}
+
+button,
+.cancel{
+    padding:12px 22px;
+    border-radius:7px;
+    font-size:14px;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+button{
+    border:none;
+    background:var(--amber);
+    color:#241a04;
+}
+
+button:hover{
+    background:var(--amber-hover);
+}
+
+.cancel{
+    border:1px solid var(--paper-line);
+    color:var(--text-secondary);
+}
+
+.cancel:hover{
+    border-color:var(--teal);
+    color:var(--teal);
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    .form{
+        grid-template-columns:1fr;
+        padding:25px;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .card-header{
+        padding:30px 25px;
+    }
+
+    .actions{
+        padding:0 25px 30px;
+        flex-direction:column;
+    }
+
+    button,
+    .cancel{
+        text-align:center;
+        width:100%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="brand">
+            <span class="dot"></span>
+            PATHFINDER
+        </div>
+
+        <a href="/myapp/profile/" class="back">
+            ← Back to Profile
+        </a>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div class="label">
+                Account Settings
+            </div>
+
+            <h1>Edit Profile</h1>
+
+            <p class="subtitle">
+                Update your personal information
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form method="post" action="/myapp/edit_profile_post/" class="form" id="editForm">
+
+            {% csrf_token %}
+
+            <div class="field full">
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    name="full_name"
+                    value="{{ profile.full_name }}"
+                    required>
+                    <input type="hidden" name="id" value="{{ profile.id }}"
+            </div>
+
+
+            <div class="field">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ profile.email }}"
+                    required>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Age</label>
+
+                <input
+                    type="number"
+                    name="age"
+                    value="{{ profile.age }}"
+                    min="1"
+                    required>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Gender</label>
+
+                <select name="gender" required>
+
+                    <option value="">Select Gender</option>
+
+                    <option value="Male"
+                    {% if profile.gender == "Male" %}selected{% endif %}>
+                        Male
+                    </option>
+
+                    <option value="Female"
+                    {% if profile.gender == "Female" %}selected{% endif %}>
+                        Female
+                    </option>
+
+                    <option value="Other"
+                    {% if profile.gender == "Other" %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Phone</label>
+
+                <input
+                    type="text"
+                    name="phone"
+                    value="{{ profile.phone }}"
+                    maxlength="15"
+                    required>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>Place</label>
+
+                <input
+                    type="text"
+                    name="place"
+                    value="{{ profile.place }}"
+                    required>
+
+            </div>
+
+        </form>
+
+
+        <div class="actions">
+
+            <button type="submit"
+                    form="editForm">
+                Save Changes
+            </button>
+
+            <a href="/myapp/profile/" class="cancel">
+                Cancel
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
