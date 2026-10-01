@@ -1,34 +1,40 @@
-
 from datetime import datetime
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
+
 import pandas as pd
+
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+
 from myapp.models import *
+
+import google.generativeai as ai
+from deep_translator import GoogleTranslator
 
 import google.generativeai as ai
 from deep_translator import GoogleTranslator
 
 import os
 from dotenv import load_dotenv
-import google.generativeai as ai
 
 load_dotenv()
 
 api_key = os.getenv("GOOGLE_API_KEY")
 
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY is not set")
+
 ai.configure(api_key=api_key)
 
 modelai = ai.GenerativeModel("gemini-3.5-flash-lite")
-
-
 # Create your views here.
 
 def login_view(request):
